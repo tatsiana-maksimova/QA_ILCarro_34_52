@@ -29,9 +29,17 @@ public class AppManager {
     @BeforeMethod(alwaysRun = true)
     public void setup(Method method) {
         //driver = new ChromeDriver();
-        if (browser.equals(Browser.CHROME.browserName())){
-            driver = new ChromeDriver();
+        if (browser.equals(Browser.CHROME.browserName())) {
+            org.openqa.selenium.chrome.ChromeOptions options = new org.openqa.selenium.chrome.ChromeOptions();
+            if (System.getenv("CI") != null) {
+                options.addArguments("--headless");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--window-size=1920,1080"); // Задаем размер экрана для GitHub
+            }
+            driver = new org.openqa.selenium.chrome.ChromeDriver(options);
         }
+
         else if (browser.equals(Browser.FIREFOX.browserName())) {
             driver = new FirefoxDriver();
         }
